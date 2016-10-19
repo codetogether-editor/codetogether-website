@@ -1,1 +1,1 @@
-module.exports = angular.module('codeTogether', ['ngMaterial', 'ui.ace']);
+module.exports = angular.module('codeTogether', ['ngMaterial', 'ui.ace', 'ui.router']);
