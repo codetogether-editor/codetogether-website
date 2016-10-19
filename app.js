@@ -34,6 +34,10 @@ function createServices({ services }) {
     }, this);
 }
 
+function requireStylesheets(requireContext) {
+  return requireContext.keys().map(requireContext);
+}
+
 var controllers = require.context("./components", true, /^\.\/.*\.js$/);
 var templates = require.context("./components", true, /^\.\/.*\.html$/);
 
@@ -41,5 +45,9 @@ var services = require.context("./services", true, /^\.\/.*\.js$/);
 
 createServices({ services });
 createComponents({ controllers, templates });
+
+var stylesheets = require.context("./components", true, /^\.\/.*\.less$/);
+
+requireStylesheets(stylesheets);
 
 app.run(run);
