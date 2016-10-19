@@ -1,10 +1,16 @@
 module.exports = function ($scope, Editor) {
     
-    // Editor.get().getSession().selection.on('changeCursor', (e) => {
-    //     var position = Editor.get().getSession().selection.anchor.getPosition();
-    //     $scope.row = position.row + 1;
-    //     $scope.column = position.column + 1;
+    var setCursorObserver = async function () {
+        var editor = await Editor.get();
+        
+        editor.getSession().selection.on('changeCursor', (e) => {
+            var position = editor.getSession().selection.getCursor();
+            $scope.row = position.row + 1;
+            $scope.column = position.column + 1;
 
-    //     $scope.$apply();
-    // });
+            $scope.$apply();
+        });
+    }
+
+    setCursorObserver();
 }

@@ -1,7 +1,5 @@
 module.exports = ($scope, Editor) => {
-    $scope.editorCfg = App.cfg.editor;
+    $scope.editorCfg = angular.extend(App.cfg.editor, { onLoad: Editor.set });
 
-    $scope.document = `export default function () {
-        console.log('this is a test');
-    }`;
+    $scope.document = `export default {\n\ttest: () => {\n\t\tconsole.log('this is a test');\n\t}\n}`;
 }

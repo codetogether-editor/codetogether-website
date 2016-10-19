@@ -1,5 +1,6 @@
 var app = require('./app.module');
 var appCfg = require('./app.cfg');
+var run = require('./app.run');
 var less = require('./assets/less/style.less');
 
 window.App = app; 
@@ -40,3 +41,5 @@ var services = require.context("./services", true, /^\.\/.*\.js$/);
 
 createServices({ services });
 createComponents({ controllers, templates });
+
+app.run(run);
