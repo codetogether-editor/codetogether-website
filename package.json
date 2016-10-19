@@ -1,0 +1,30 @@
+{
+  "name": "codetogether-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-preset-es2016": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "html-loader": "^0.4.4",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "live-server": "^1.1.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tomasz Pierzchała",
+  "license": "ISC",
+  "babel": {
+    "plugins": [
+      "transform-async-to-generator"
+    ]
+  }
+}
