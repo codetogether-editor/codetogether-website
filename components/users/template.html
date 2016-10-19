@@ -1,0 +1,23 @@
+<md-sidenav class="users md-sidenav-right" md-component-id="right" md-is-locked-open="true" md-whiteframe="4" layout-fill>
+    <md-toolbar>
+        <h1 class="md-toolbar-tools text-light">
+            <div class="icon-wrapper">
+                <i class="material-icons">people</i>
+            </div>
+            Users</h1>
+    </md-toolbar>
+
+    <md-content>
+        <div layout="row" layout-align="start center" style="padding: 5px 15px; margin: 5px 0; color: #fff; cursor: pointer; border-left: 3px solid #219fd1;"
+            ng-click="$mdOpenMenu($event)">
+            <img class="md-avatar" src="http://placehold.it/200x200" style="height: 30px; border-radius: 100%;">
+            <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">John Doe</span>
+        </div>
+
+        <div layout="row" layout-align="start center" style="padding: 5px 15px; margin: 5px 0; color: #fff; cursor: pointer; border-left: 3px solid #d1cc21;"
+            ng-click="$mdOpenMenu($event)">
+            <img class="md-avatar" src="http://placehold.it/200x200" style="height: 30px; border-radius: 100%;">
+            <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">Danny Parker</span>
+        </div>
+    </md-content>
+</md-sidenav>
