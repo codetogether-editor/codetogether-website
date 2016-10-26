@@ -1,7 +1,8 @@
 var app = require('./app.module');
-var appCfg = require('./app.cfg');
+var appCfg = require('./app.defaults');
 var run = require('./app.run');
 var routes = require('./app.routes');
+var config = require('./app.config');
 var less = require('./assets/less/style.less');
 
 window.App = app; 
@@ -52,5 +53,7 @@ var stylesheets = require.context("./components", true, /^\.\/.*\.less$/);
 requireStylesheets(stylesheets);
 
 app.config(routes);
+
+app.config(config);
 
 app.run(run);
