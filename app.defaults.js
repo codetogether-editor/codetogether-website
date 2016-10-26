@@ -5,8 +5,31 @@ module.exports = {
     extensions: [
         {
             ext: 'js',
-            name: 'JavaScript',
-            icon: 'javascript'
+            display: 'JavaScript',
+            name: 'javascript'
+        },
+        {
+            ext: 'java',
+            display: 'Java',
+            name: 'java'
+        },
+        {
+            ext: 'cs',
+            display: 'C#',
+            name: 'csharp'
+        },
+        {
+            ext: 'html',
+            display: 'HTML',
+            name: 'html',
+            icon: 'html5'
+        },
+        {
+            ext: 'css',
+            display: 'CSS',
+            name: 'css',
+            icon: 'css3'
+
         }
     ]
 }
