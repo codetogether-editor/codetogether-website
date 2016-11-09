@@ -1,0 +1,17 @@
+<md-dialog aria-label="Share file dialog">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Share this file</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()">
+				<md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<md-dialog-content style="padding: 30px;">
+		Send this link to someone you want to share this file:
+        <div style="background: #e1e1e1; padding: 15px; margin-top: 15px; text-align: center;">
+            {{link}}
+        </div>
+	</md-dialog-content>
+</md-dialog>

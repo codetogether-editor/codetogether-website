@@ -12,7 +12,12 @@ function createComponents({ controllers, templates }) {
     controllers.keys().forEach(function (controllerPath) {
         var name = controllerPath.split('/')[1];
         var path = controllerPath.substr(0, controllerPath.lastIndexOf('/'));
-        var templatePath = templates.keys().filter(x => x.includes(path))[0];
+
+        if (path.includes('dialogs')) {
+            return;
+        }
+
+        var templatePath = templates.keys().filter(x => x === `${path}/template.html`)[0];
 
         var controller = controllers(controllerPath);
         var template = templates(templatePath);
