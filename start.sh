@@ -1,1 +1,1 @@
-start webpack --watch && start live-server
+start webpack --watch && start live-server --entry-file=index.html
