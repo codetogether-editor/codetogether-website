@@ -29,7 +29,12 @@ module.exports = {
             display: 'CSS',
             name: 'css',
             icon: 'css3'
-
+        },
+        {
+            ext: '*',
+            display: 'Plain Text',
+            name: 'text',
+            icon: 'atom'
         }
     ]
 }
