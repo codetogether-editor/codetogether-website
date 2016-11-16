@@ -1,0 +1,21 @@
+<md-dialog aria-label="Share file dialog">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Create new file</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content style="padding: 30px;" layout="column" layout-align="center center">
+        Enter new file name:
+        <div>
+            <md-input-container>
+                <label>File name</label>
+                <input ng-model="fileName">
+            </md-input-container>
+        </div>
+        <md-button ng-click="createFile">Create file</md-button>
+    </md-dialog-content>
+</md-dialog>
