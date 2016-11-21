@@ -14,7 +14,7 @@
             <form name="newFile">
                 <md-input-container>
                     <label>File name</label>
-                    <input ng-class="{ 'ng-dirty' : newFile.$valid }" ng-model="fileName" ng-required="true">
+                    <input ng-class="{ 'ng-dirty' : (newFile.$valid || !fileName) }" ng-model="fileName" ng-required="true">
                 </md-input-container>
             </form>
         </div>

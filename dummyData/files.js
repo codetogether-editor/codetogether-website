@@ -1,11 +1,11 @@
 module.exports = [
     {
-        id: 0,
+        id: '0',
         fileName: 'main.js',
         content: 'function getShiftedOffset(offset, shift) { //if not possible then returns first or last ALPHABET el\n    let shiftedOffsetPos = ALPHABET.indexOf(offset) + shift\n    if (shiftedOffsetPos < ALPH_BEG_POS)\n        return ALPH_BLANK\n    if (shiftedOffsetPos > ALPH_END)\n        return ALPH_END\n    else\n        return ALPHABET[shiftedOffsetPos]\n}'
     },
     {
-        id: 1,
+        id: '1',
         fileName: 'test.java',
         content: `/******************************************************************************
  *  Compilation:  javac HelloWorld.java
@@ -35,7 +35,7 @@ public class HelloWorld {
 }`
     },
     {
-        id: 2,
+        id: '2',
         fileName: 'styles.css',
         content: `.editor-wrapper {
     position: absolute; 
@@ -48,7 +48,7 @@ public class HelloWorld {
 }`
     },
     {
-        id: 3,
+        id: '3',
         fileName: 'template.html',
         content: `      <div class="footer" layout="row" layout-align="end center">
     <span class="meta">Ln {{row}}, Col {{column}}</span>

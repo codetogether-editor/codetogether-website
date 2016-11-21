@@ -7,6 +7,7 @@ module.exports = function ($rootScope, $q) {
     $scope.$watch('editor', () => {
         if ($scope.editor) {
             $scope.isEditorSet.resolve($scope.editor);
+            $scope.isEditorSet = $q.defer();
         }
     });
 

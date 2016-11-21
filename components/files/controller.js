@@ -1,15 +1,12 @@
-module.exports = function ($scope, Editor, $rootScope, $mdSidenav, Files) {
+module.exports = function ($scope, Editor, $rootScope, $mdSidenav, Files, $state) {
     $scope.files = Files.get();
 
     $scope.findFileMetaByName = Files.findFileMetaByName;
 
     $scope.changeFile = async function (file) {
-        var meta = $scope.findFileMetaByName(file.fileName);
+        Files.setCurrent(file.id);
 
-        var editor = await Editor.get();
-        editor.getSession().setMode(`ace/mode/${meta.name}`);
-
-        $rootScope.$emit('fileChange', { file, meta });
+        $state.go('editor.file', { id: file.id });
         
         $mdSidenav('files').close();
     };
