@@ -1,7 +1,7 @@
 module.exports = {
   cache: false,
   target: 'web',
-  entry: './app.js',
+  entry: ['babel-regenerator-runtime', './app.js'],
   output: {
     path: __dirname,
     filename: 'bundle.js'
@@ -12,7 +12,8 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         query: {
-          presets: ['es2016']
+          presets: ['es2015'],
+          plugins: ['syntax-async-functions','transform-regenerator']
         }
       },
       {

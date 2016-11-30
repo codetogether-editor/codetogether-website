@@ -1,14 +1,18 @@
-module.exports = function ($http, $auth) {
-    var userApiUrl = 'https://api.codetogether.muskala.eu/user';
+module.exports = function ($http, $auth, $q) {
+    var userApiUrl = 'http://api.codetogether.muskala.eu/user';
     var token = $auth.getToken();
     var user = null;
+    var deferred = $q.defer();
 
     async function get() {
-        if (!user) {
-            user = await $http.get(userApiUrl).$promise;
+        if (token) {
+            var res = await $http.get(userApiUrl);
+            user = res.data.user;
+
+            deferred.resolve(user);
         }
 
-        return user;
+        return deferred.promise;
     }
 
     return { get };

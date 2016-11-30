@@ -1,40 +1,41 @@
 var sampleFiles = require('../dummyData/files');
 
-module.exports = function ($rootScope) {
+module.exports = function ($rootScope, Observable) {
     var current = null;
     var files = null;
+    var observable = new Observable();
 
-    var fetch = () => {
+    observable.fetch = () => {
         files = sampleFiles;
     };
 
-    var get = () => {
+    observable.get = () => {
         if (!files) {
-            fetch();
+            observable.fetch();
         }
 
         return files;
     };
 
-    var getCurrent = () => current;
+    observable.getCurrent = () => current;
 
-    var setCurrent = (id) => {
-        file = files.filter(x => x.id === id)[0];
+    observable.setCurrent = (id) => {
+        var file = files.filter(x => x.id === id)[0];
         current = file;
 
-        var meta = findFileMetaByName(file.fileName);
+        var meta = observable.findFileMetaByName(file.fileName);
 
-        $rootScope.$emit('fileChange', { file, meta });
+        observable.next({ file, meta });
     };
 
-    var findFileMetaByName = (fileName) => {
+    observable.findFileMetaByName = (fileName) => {
         var ext = fileName.split('.');
         ext = ext[ext.length - 1];
 
         return App.cfg.extensions.filter(x => x.ext === ext)[0] || App.cfg.extensions.filter(x => x.ext === '*')[0];
     };
 
-    var add = (fileName) => {
+    observable.add = (fileName) => {
         // send file to the server and then add response data to files
 
         var simulateServerResponse = () => {
@@ -47,5 +48,5 @@ module.exports = function ($rootScope) {
         setCurrent(file.id);
     };
 
-    return { get, setCurrent, getCurrent, add, findFileMetaByName };
+    return observable;
 }

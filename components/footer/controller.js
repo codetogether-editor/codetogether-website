@@ -1,4 +1,4 @@
-module.exports = function ($scope, $rootScope, Editor) {
+module.exports = function ($scope, $rootScope, Editor, Files) {
 
     var setCursorObserver = async function () {
         var editor = await Editor.get();
@@ -18,7 +18,7 @@ module.exports = function ($scope, $rootScope, Editor) {
 
     $scope.language = 'JavaScript';
 
-    $rootScope.$on('fileChange', (e, args) => {
+    Files.subscribe((args) => {
         $scope.language = args.meta.display;
     });
 }
