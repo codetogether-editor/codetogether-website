@@ -6,10 +6,10 @@ module.exports = function ($http, $auth, $q) {
 
     async function get() {
         if (token) {
-            var res = await $http.get(userApiUrl);
-            user = res.data.user;
-
-            deferred.resolve(user);
+            $http.get(userApiUrl).then((res) => {
+                user = res.data.user;
+                deferred.resolve(user);
+            });
         }
 
         return deferred.promise;
