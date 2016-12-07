@@ -1,5 +1,5 @@
 module.exports = function ($http, $auth, $q) {
-    var userApiUrl = 'http://api.codetogether.muskala.eu/user';
+    var userApiUrl = `http://${App.cfg.endpoint}/user`;
     var token = $auth.getToken();
     var user = null;
     var deferred = $q.defer();

@@ -16,6 +16,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "live-server": "^1.1.0",
+    "phoenix": "^1.2.1",
     "rxjs": "^5.0.0-rc.4",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2"

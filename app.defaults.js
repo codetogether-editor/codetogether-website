@@ -1,5 +1,7 @@
 module.exports = {
     netAddress: 'http://127.0.0.1:8080',
+    endpoint: 'api.codetogether.muskala.eu',
+    // endpoint: 'd65b2307.ngrok.io',
     editor: {
         theme: 'idle_fingers'
     },

@@ -1,4 +1,4 @@
-module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser) {
+module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser, Connection) {
     async function configureEditor() {
         var editor = await Editor.get();
         editor.getSession().setMode("ace/mode/javascript");
@@ -19,4 +19,21 @@ module.exports = async function ($rootScope, $mdSidenav, $state, Editor, Current
     }
 
     $rootScope.$apply();
+
+    // Phoenix test
+
+    Connection.connect();
+    Connection.createChannel('ping');
+
+    var channel = Connection.getChannel(); 
+    channel.join();
+
+    channel.on('pong', (msg) => {
+        console.log(msg);
+    });
+
+    channel.push('ping', {msg: 'pong'}, 10000)
+        .receive("ok", (msg) => console.log("created message", msg) )
+        .receive("error", (reasons) => console.log("create failed", reasons) )
+        .receive("timeout", () => console.log("Networking issue...") )
 }
