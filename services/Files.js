@@ -45,7 +45,7 @@ module.exports = function ($rootScope, Observable) {
         var file = simulateServerResponse();
 
         files.push(file);
-        setCurrent(file.id);
+        observable.setCurrent(file.id);
     };
 
     return observable;

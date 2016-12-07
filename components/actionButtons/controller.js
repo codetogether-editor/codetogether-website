@@ -1,5 +1,5 @@
 module.exports = function ($scope, $mdDialog, Files) {
-    var Files = Files;
+    $scope.currentFile = Files.getCurrent();
 
     var shareDialog = { 
         template: require('./dialogs/share/template.html'),
@@ -18,4 +18,8 @@ module.exports = function ($scope, $mdDialog, Files) {
     $scope.share = () => {
         $mdDialog.show(shareDialog);
     };
+
+    Files.subscribe((args) => {
+        $scope.currentFile = args.file;
+    });
 }
