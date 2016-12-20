@@ -16,8 +16,8 @@
 
                 <md-menu>
                     <div layout="row" layout-align="center center" style="padding-right: 72px; color: #fff; cursor: pointer;" ng-click="$mdOpenMenu($event)">
-                        <img class="md-avatar" src="http://placehold.it/200x200" style="height: 30px; border-radius: 100%;">
-                        <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">John Doe</span>
+                        <img class="md-avatar" ng-src="{{$root.user.avatar_url}}" style="height: 30px; border-radius: 100%;">
+                        <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">{{$root.user.name}}</span>
                         <i class="material-icons">expand_more</i>
                     </div>
                     <md-menu-content width="4">

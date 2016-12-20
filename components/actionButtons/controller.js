@@ -1,4 +1,6 @@
-module.exports = function ($scope, $mdDialog) {
+module.exports = function ($scope, $mdDialog, Files) {
+    var Files = Files;
+
     var shareDialog = { 
         template: require('./dialogs/share/template.html'),
         controller: require('./dialogs/share/controller.js')

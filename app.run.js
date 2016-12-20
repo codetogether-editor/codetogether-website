@@ -1,4 +1,4 @@
-module.exports = function ($rootScope, $mdSidenav, $state, Editor) {
+module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser) {
     async function configureEditor() {
         var editor = await Editor.get();
         editor.getSession().setMode("ace/mode/javascript");
@@ -12,13 +12,11 @@ module.exports = function ($rootScope, $mdSidenav, $state, Editor) {
 
     $rootScope.$mdSidenav = $mdSidenav;
 
-    // if (!$rootScope.user) {
-    //     $state.go('login');
-    // }
+    $rootScope.user = await CurrentUser.get();
 
-    // $rootScope.$on('$stateChangeStart', (event, toState) => {
-    //     if (!$rootScope.user && toState.name !== 'login') {
-    //         $state.go('login');
-    //     }
-    // });
+    if (!$rootScope.user) {
+        $state.go('login');
+    }
+
+    $rootScope.$apply();
 }
