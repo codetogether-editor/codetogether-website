@@ -1,6 +1,9 @@
 <div class="footer" layout="row" layout-align="end center">
-    <span class="meta">Ln {{row}}, Col {{column}}</span>
-    <span class="meta" layout="row" layout-align="center center">
-        {{language}} <i class="material-icons">settings</i>
-    </span>
+    <div layout="row" layout-align="end center" ng-if="language">
+        <span class="meta">Ln {{row}}, Col {{column}}</span>
+        <span class="meta" layout="row" layout-align="center center">
+            {{language}} 
+            <!--<i class="material-icons">settings</i>-->
+        </span>
+    </div>
 </div>

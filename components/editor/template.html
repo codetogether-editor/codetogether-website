@@ -1,4 +1,8 @@
 <div class="editor-wrapper">
     <div id="editor" ui-ace="editorCfg" ng-model="document" layout-fill>
     </div>
+
+    <div class="welcome" layout-fill ng-if="!file">
+        <div class="md-title">Choose file to edit or create a new one!</div>
+    </div>
 </div>

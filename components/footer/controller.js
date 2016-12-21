@@ -1,4 +1,10 @@
 module.exports = function ($scope, $rootScope, Editor, Files) {
+    if (Files.getCurrent()) {
+        $scope.language = Files.findFileMetaByName(Files.getCurrent().fileName).display;
+    }
+
+    $scope.row = 1;
+    $scope.column = 1;
 
     var setCursorObserver = async function () {
         var editor = await Editor.get();
@@ -15,8 +21,6 @@ module.exports = function ($scope, $rootScope, Editor, Files) {
     }
 
     setCursorObserver();
-
-    $scope.language = 'JavaScript';
 
     Files.subscribe((args) => {
         $scope.language = args.meta.display;
