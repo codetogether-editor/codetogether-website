@@ -18,7 +18,7 @@ module.exports = function () {
                 observable.del(cmd.ids)
     }
 
-    observable.insert = (str, line, column) => {
+    observable.insert = ({start, lines}) => {
         var addCmd = docChanger.performInsertAndGetAddCmd(str, line, column)
         var command = {
             type: 'emitAdd',
@@ -28,13 +28,13 @@ module.exports = function () {
         observable.next(command)
     }
 
-    observable.remove = (startLine, startColumn, endLine, endColumn) => {
-         var delCmd = docChanger.performRemoveAndGetDelCmd(startLine, startColumn, endLine, endColumn)
+    observable.remove = ({start, lines}) => {
+         var delCmd = docChanger.performRemoveAndGetDelCmd(start.row, start.column, lines)
          var command = {
              type: 'emitDel',
              ids: delCmd.ids
          }
-         Observable.next(command)
+         observable.next(command)
     }
 
     observable.add = (str, firstCharId) => {
