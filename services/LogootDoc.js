@@ -1,13 +1,11 @@
 module.exports = function () {
     var sessionId = null
-    var aceEditor = null
     var docChanger = null
     var observable = new Observable()
 
-    observable.init = (sessionId, aceEditor) => {
+    observable.init = (sessionId) => {
         var loogotDoc = new Document()
         var algorithm = new Algorithm(loogotDoc, sessionId)
-        var docChanger = new DocumentChanger(algorithm, aceEditor)
     }
 
     observable.loadDoc = (remoteCommands) => {
@@ -18,8 +16,8 @@ module.exports = function () {
                 observable.del(cmd.ids)
     }
 
-    observable.insert = ({start, lines}) => {
-        var addCmd = docChanger.performInsertAndGetAddCmd(str, line, column)
+    observable.insert = ({startIndex, text}) => {
+        var addCmd = algorithm.insert(text, startIndex + 1)
         var command = {
             type: 'emitAdd',
             string: addCmd.str,
@@ -28,8 +26,8 @@ module.exports = function () {
         observable.next(command)
     }
 
-    observable.remove = ({start, lines}) => {
-         var delCmd = docChanger.performRemoveAndGetDelCmd(start.row, start.column, lines)
+    observable.remove = ({startIndex, endIndex}) => {
+         var delCmd = algorithm.remove(startIndex + 1, endIndex + 1)
          var command = {
              type: 'emitDel',
              ids: delCmd.ids
@@ -37,15 +35,12 @@ module.exports = function () {
          observable.next(command)
     }
 
-    observable.add = (str, firstCharId) => {
-        var changes = docChanger.addAndGetChanges(str, firstCharId);
+    observable.add = ({str, firstCharId}) => {
+        var changes = algorithm.add(str, firstCharId);
         for(var change of changes){
             var command = {
                 type: 'add',
-                position:{
-                    line: change.position.line,
-                    column: change.position.column
-                },
+                index: change.position, 
                 value: change.string
             }
             observable.next(command)
@@ -57,16 +52,8 @@ module.exports = function () {
         for(var change of changes){
             var command = {
                 type: 'del',
-                range:{
-                    from:{
-                        line: change.from.line,
-                        column: change.from.column
-                    },
-                    to:{
-                        line: change.to.line,
-                        column: change.to.column
-                    }
-                }
+                fromIndex: change.from,
+                toIndex: change.to
             }
             observable.next(command)
         }

@@ -84,10 +84,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Algorithm2 = _interopRequireDefault(_Algorithm);
 	
-	var _DocumentChanger = __webpack_require__(8);
-	
-	var _DocumentChanger2 = _interopRequireDefault(_DocumentChanger);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	window.Base = _Base2.default;
@@ -96,7 +92,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	window.Char = _Char2.default;
 	window.Document = _Document2.default;
 	window.Algorithm = _Algorithm2.default;
-	window.DocumentChanger = _DocumentChanger2.default;
 
 /***/ },
 /* 1 */
@@ -106,7 +101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	window.MIN_BASE_EL = 0;
 	//const MAX_BASE_EL = Math.pow(2, 53) - 1
-	window.MAX_BASE_EL = 1000;
+	window.MAX_BASE_EL = 10000000;
 	window.MIN_OFFSET = MIN_BASE_EL + 1;
 	window.MAX_OFFSET = MAX_BASE_EL;
 	window.FIRST_ASSIGNED_OFFSET = Math.floor(MAX_OFFSET / 2);
@@ -430,28 +425,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (prevUsedPos === pos || changeStr === "") {
 	                    changeStr = chars[i].value + changeStr;
 	                } else {
-	                    var change = { type: "add", string: changeStr, position: this.getCoordPos(prevUsedPos) };
+	                    var change = { type: "add", string: changeStr, position: prevUsedPos - 1 }; //ace position, not loogot
 	                    changes.push(change);
 	                    changeStr = chars[i].value;
 	                }
-	                if (i == 0 && changeStr !== "") changes.push({ type: "add", string: changeStr, position: this.getCoordPos(pos) });
+	                if (i == 0 && changeStr !== "") changes.push({ type: "add", string: changeStr, position: pos - 1 });
 	                this.insertCharAtPos(chars[i], pos);
 	                prevUsedPos = pos;
 	            }
 	
 	            return changes;
-	        }
-	    }, {
-	        key: 'getCoordPos',
-	        value: function getCoordPos(pos) {
-	            var line = 0;
-	            var column = 0;
-	            for (var i = pos - 1; this.chars[i].value != '\n' && i > 0; --i) {
-	                column++;
-	            }
-	            for (var _i = 1; _i < pos; ++_i) {
-	                if (this.chars[_i].value == "\n") line++;
-	            }return { line: line, column: column };
 	        }
 	    }, {
 	        key: 'sortDocumentPart',
@@ -657,6 +640,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.createRemoteAddCommand(str, pos);
 	        }
 	    }, {
+	        key: 'remove',
+	        value: function remove(fromPos, toPos) {
+	            var delIds = this.doc.getCharIds(fromPos, toPos);
+	            var delIdsCopy = delIds.map(function (id) {
+	                return id.copy;
+	            });
+	            this.doc.delChars(fromPos, toPos);
+	            return this.createRemoteDelCommand(delIdsCopy);
+	        }
+	    }, {
 	        key: 'add',
 	        value: function add(str, strId) {
 	            var chars = this.createCharsFromStr(str, strId);
@@ -671,16 +664,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            var changes = this.doc.addCharsAndGetChanges(chars);
 	            return changes;
-	        }
-	    }, {
-	        key: 'remove',
-	        value: function remove(fromPos, toPos) {
-	            var delIds = this.doc.getCharIds(fromPos, toPos);
-	            var delIdsCopy = delIds.map(function (id) {
-	                return id.copy;
-	            });
-	            this.doc.delChars(fromPos, toPos);
-	            return this.createRemoteDelCommand(delIdsCopy);
 	        }
 	    }, {
 	        key: 'del',
@@ -723,12 +706,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var i = delPos.length - 1; i >= 0; --i) {
 	                var pos = delPos[i];
 	                if (prevUsedPos === pos + 1 || delPosRange.start == null) delPosRange = this.extendRange(delPosRange, pos);else {
-	                    var change = { type: "del", from: this.doc.getCoordPos(delPosRange.start), to: this.doc.getCoordPos(delPosRange.end) };
+	                    var change = { type: "del", from: delPosRange.start - 1, to: delPosRange.end - 1 };
 	                    changes.push(change);
 	                    delPosRange = { start: pos, end: pos };
 	                }
 	                if (i == 0 && delPosRange.start != null) {
-	                    var _change = { type: "del", from: this.doc.getCoordPos(delPosRange.start), to: this.doc.getCoordPos(delPosRange.end) };
+	                    var _change = { type: "del", from: delPosRange.start - 1, to: delPosRange.end - 1 };
 	                    changes.push(_change);
 	                }
 	                prevUsedPos = pos;
@@ -940,129 +923,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = Algorithm;
-	module.exports = exports['default'];
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _Base = __webpack_require__(3);
-	
-	var _Base2 = _interopRequireDefault(_Base);
-	
-	var _CharId = __webpack_require__(4);
-	
-	var _CharId2 = _interopRequireDefault(_CharId);
-	
-	var _Char = __webpack_require__(5);
-	
-	var _Char2 = _interopRequireDefault(_Char);
-	
-	var _Document = __webpack_require__(6);
-	
-	var _Document2 = _interopRequireDefault(_Document);
-	
-	var _RemoteCommand = __webpack_require__(2);
-	
-	var _RemoteCommand2 = _interopRequireDefault(_RemoteCommand);
-	
-	var _Algorithm = __webpack_require__(7);
-	
-	var _Algorithm2 = _interopRequireDefault(_Algorithm);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var DocumentChanger = function () {
-	    function DocumentChanger(algorithm, editor) {
-	        _classCallCheck(this, DocumentChanger);
-	
-	        this.algorithm = algorithm;
-	        this.editor = editor;
-	        this.doc = algorithm.doc;
-	        this.sessionId = algorithm.sessionId;
-	        this.lines = this.doc.getAsLines();
-	    }
-	
-	    _createClass(DocumentChanger, [{
-	        key: 'performInsertAndGetAddCmd',
-	        value: function performInsertAndGetAddCmd(str, line, column) {
-	            var pos = this.convertToAbsolutePos(line, column);
-	            var addCmd = this.algorithm.insert(str, pos);
-	            return addCmd;
-	        }
-	    }, {
-	        key: 'performRemoveAndGetDelCmd',
-	        value: function performRemoveAndGetDelCmd(startLine, startColumn, endLine, endColumn) {
-	            var fromPos = this.convertToAbsolutePos(startLine, startColumn);
-	            var toPos = this.convertToAbsolutePos(endLine, endColumn);
-	            var delCmd = this.algorithm.remove(fromPos, toPos);
-	            return delCmd;
-	        }
-	    }, {
-	        key: 'addAndGetChanges',
-	        value: function addAndGetChanges(str, strId) {
-	            var changes = this.algorithm.add(str, strId);
-	            //for(let c of changes)
-	            //    console.log(c.type, c.string, c.position.line, c.position.column)
-	            return changes;
-	        }
-	    }, {
-	        key: 'delAndGetChanges',
-	        value: function delAndGetChanges(ids) {
-	            var changes = this.algorithm.del(ids);
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
-	
-	            try {
-	                for (var _iterator = changes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var c = _step.value;
-	
-	                    console.log(c.type, c.from.line, c.from.column, c.to.line, c.to.column);
-	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
-	                }
-	            }
-	
-	            return changes;
-	        }
-	    }, {
-	        key: 'convertToAbsolutePos',
-	        value: function convertToAbsolutePos(line, column) {
-	            var pos = 0;
-	            var realDoc = this.editor.getSession().getDocument();
-	
-	            if (line > 0) for (var i = 0; i < line; ++i) {
-	                pos += realDoc.getLine(i).length;
-	            }return pos + line + column + 1;
-	        }
-	    }]);
-	
-	    return DocumentChanger;
-	}();
-	
-	exports.default = DocumentChanger;
 	module.exports = exports['default'];
 
 /***/ }
