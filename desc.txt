@@ -1,0 +1,4 @@
+Service LogootDoc -> subskrybują się:
+    - Connection (Użytkownik edytuje plik lokalnie -> LogootDoc.insert() -> 
+        -> next(emitAdd || emitDel) -> Connection wysyła zmianę na serwer)
+    - Editor (next(add || del))

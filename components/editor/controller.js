@@ -1,7 +1,10 @@
-module.exports = function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout) {
+var Range = ace.require('ace/range').Range;
+
+module.exports = async function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout) {
     $scope.editorCfg = angular.extend(App.cfg.editor, { onLoad: Editor.set });
 
-    // $scope.document = `export default {\n\ttest: () => {\n\t\tconsole.log('this is a test');\n\t}\n}`;
+    var editor = await Editor.get();
+    var doc = editor.getSession().getDocument();
 
     Files.subscribe(async (args) => {
         var { file, meta } = args;
@@ -11,9 +14,33 @@ module.exports = function ($scope, $rootScope, Editor, $state, $stateParams, Fil
 
         var editor = await Editor.get();
         editor.getSession().setMode(`ace/mode/${meta.name}`);
+        editor.resize(true); 
+    });
 
-        var Range = ace.require("ace/range").Range
-        erroneousLine = editor.session.addMarker(new Range(0, 0, 1, 5), "sampleHighlight", "fullLine");
+    // var addMarker = ({ className, e }) => {
+    //     className = className || 'me-highlight';
+    //     var range = new Range(e.start.row, e.start.column, e.end.row, e.end.column);
+
+    //     editor.session.addMarker(range, className, 'fullLine', false);
+    // };
+
+    doc.on('change', (e) => { 
+        var allowedActions = ['insert', 'remove'];
+        var userChange = editor.curOp && editor.curOp.args;
+
+        if (!userChange || allowedActions.indexOf(e.action) === -1) {
+            return;
+        }
+
+        var change = {
+            startIndex: doc.positionToIndex(e.start, 0),
+            endIndex: doc.positionToIndex(e.end, 0),
+            text: e.lines.join('\n')
+        };
+
+        // addMarker({ e })
+
+        // LogootDoc[e.action](change);
     });
 
     if ($stateParams.id) {
