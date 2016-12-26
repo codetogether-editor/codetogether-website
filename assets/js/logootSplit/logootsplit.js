@@ -101,7 +101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	window.MIN_BASE_EL = 0;
 	//const MAX_BASE_EL = Math.pow(2, 53) - 1
-	window.MAX_BASE_EL = 1000;
+	window.MAX_BASE_EL = 10000000;
 	window.MIN_OFFSET = MIN_BASE_EL + 1;
 	window.MAX_OFFSET = MAX_BASE_EL;
 	window.FIRST_ASSIGNED_OFFSET = Math.floor(MAX_OFFSET / 2);
@@ -151,7 +151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = RemoteCommand;
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ },
 /* 3 */
@@ -212,7 +212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = Base;
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ },
 /* 4 */
@@ -268,7 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = CharId;
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ },
 /* 5 */
@@ -303,7 +303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = Char;
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 /***/ },
 /* 6 */
@@ -350,7 +350,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Document, [{
 	        key: 'insertStrAppended',
 	        value: function insertStrAppended(str, pos) {
-	            logFunc("insertStrAppended", [str, pos]);
 	            var charWeAppendTo = this.chars[pos - 1];
 	            var base = charWeAppendTo.id.base;
 	            var firstOffset = charWeAppendTo.id.offset + 1;
@@ -359,7 +358,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'insertStrPrepended',
 	        value: function insertStrPrepended(str, pos) {
-	            logFunc("insertStrPrepended", [str, pos]);
 	            var charWePrependTo = this.chars[pos];
 	            var base = charWePrependTo.id.base;
 	            var firstOffset = charWePrependTo.id.offset - str.length;
@@ -370,21 +368,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function insertStringWithExistingBase(str, pos, base) {
 	            var firstOffset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : FIRST_ASSIGNED_OFFSET;
 	            //optimize
-	            logFunc("insertStrWithExistingBase", [str, pos, base, firstOffset]);
 	            this.insertStrAtPos(str, pos, base, firstOffset);
-	            this.sortDocumentPart(1, this.chars.length - 1);
+	            //this.sortDocumentPart(1, this.chars.length - 1) //VERIFY CHANGE
+	            this.sortDocumentPart(pos, this.chars.length - 1);
 	        }
 	    }, {
 	        key: 'insertStringWithNewBase',
 	        value: function insertStringWithNewBase(str, pos, base) {
-	            logFunc("insertStrWithNewBase", [str, pos, base]);
 	            this.addBase(base);
 	            this.insertStringWithExistingBase(str, pos, base);
 	        }
 	    }, {
 	        key: 'insertStrAtPos',
 	        value: function insertStrAtPos(str, pos, base, firstCharOffset) {
-	            logFunc("insertStrAtPos", [str, pos, base, firstCharOffset]);
 	            var offset = firstCharOffset;
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
@@ -416,38 +412,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }, {
-	        key: 'addChars',
-	        value: function addChars(chars) {
-	            logFunc("addChars", [chars]);
-	            if (chars.length == 0) return;
-	            var pos = this.getPosOfFirstCharWithBiggerId(chars[0].id);
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
+	        key: 'addCharsAndGetChanges',
+	        value: function addCharsAndGetChanges(chars) {
+	            var changes = [];
+	            if (chars.length == 0) return changes;
+	            var pos0 = this.getPosOfFirstCharWithBiggerId(chars[0].id);
+	            var prevUsedPos = null;
+	            var changeStr = "";
 	
-	            try {
-	                for (var _iterator2 = chars[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var char = _step2.value;
-	
-	                    this.insertCharAtPos(char, pos);
-	                    ++pos;
+	            for (var i = chars.length - 1; i >= 0; --i) {
+	                var pos = this.getPosOfFirstCharWithBiggerIdStartingFrom(chars[i].id, pos0);
+	                if (prevUsedPos === pos || changeStr === "") {
+	                    changeStr = chars[i].value + changeStr;
+	                } else {
+	                    var change = { type: "add", string: changeStr, position: prevUsedPos - 1 }; //ace position, not loogot
+	                    changes.push(change);
+	                    changeStr = chars[i].value;
 	                }
-	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
-	                    }
-	                }
+	                if (i == 0 && changeStr !== "") changes.push({ type: "add", string: changeStr, position: pos - 1 });
+	                this.insertCharAtPos(chars[i], pos);
+	                prevUsedPos = pos;
 	            }
 	
-	            this.sortDocumentPart(1, this.chars.length - 1);
+	            return changes;
 	        }
 	    }, {
 	        key: 'sortDocumentPart',
@@ -463,7 +450,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'addBase',
 	        value: function addBase(base) {
-	            logFunc("addBase", [base]);
 	            this.bases.push(base);
 	        }
 	    }, {
@@ -486,9 +472,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }return null;
 	        }
 	    }, {
+	        key: 'getPosOfCharWithIdStartingFrom',
+	        value: function getPosOfCharWithIdStartingFrom(id, startPos) {
+	            for (var pos = startPos; pos < this.chars.length; ++pos) {
+	                if (this.chars[pos].id.isEqual(id)) return pos;
+	            }return null;
+	        }
+	    }, {
 	        key: 'getPosOfFirstCharWithBiggerId',
 	        value: function getPosOfFirstCharWithBiggerId(charId) {
 	            for (var pos = 1; pos < this.chars.length; ++pos) {
+	                if (this.chars[pos].id.isBigger(charId)) return pos;
+	            }return null;
+	        }
+	    }, {
+	        key: 'getPosOfFirstCharWithBiggerIdStartingFrom',
+	        value: function getPosOfFirstCharWithBiggerIdStartingFrom(charId, startPos) {
+	            for (var pos = startPos; pos < this.chars.length; ++pos) {
 	                if (this.chars[pos].id.isBigger(charId)) return pos;
 	            }return null;
 	        }
@@ -513,27 +513,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getSameBase',
 	        value: function getSameBase(base) {
-	            var _iteratorNormalCompletion3 = true;
-	            var _didIteratorError3 = false;
-	            var _iteratorError3 = undefined;
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
 	
 	            try {
-	                for (var _iterator3 = this.bases[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                    var b = _step3.value;
+	                for (var _iterator2 = this.bases[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var b = _step2.value;
 	
 	                    if (base.isEqual(b)) return b;
 	                }
 	            } catch (err) {
-	                _didIteratorError3 = true;
-	                _iteratorError3 = err;
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                        _iterator3.return();
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError3) {
-	                        throw _iteratorError3;
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
 	                    }
 	                }
 	            }
@@ -543,13 +543,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'insertCharAtPos',
 	        value: function insertCharAtPos(char, pos) {
-	            logFunc("insertCharAtPos", [char, pos]);
 	            this.chars.splice(pos, 0, char);
 	        }
 	    }, {
 	        key: 'isEmpty',
 	        value: function isEmpty() {
 	            return this.chars.length == 2;
+	        }
+	    }, {
+	        key: 'getAsLines',
+	        value: function getAsLines() {
+	            var lines = [];
+	            var line = [];
+	            for (var i = 1; i < this.chars.length - 1; ++i) {
+	                line.push(this.chars[i]);
+	                if (this.chars[i].value == '\n' || i == this.chars.length - 2) lines.push(line);
+	            }
+	            return lines;
 	        }
 	    }, {
 	        key: 'text',
@@ -630,12 +640,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.createRemoteAddCommand(str, pos);
 	        }
 	    }, {
+	        key: 'remove',
+	        value: function remove(fromPos, toPos) {
+	            var delIds = this.doc.getCharIds(fromPos, toPos);
+	            var delIdsCopy = delIds.map(function (id) {
+	                return id.copy;
+	            });
+	            this.doc.delChars(fromPos, toPos);
+	            return this.createRemoteDelCommand(delIdsCopy);
+	        }
+	    }, {
 	        key: 'add',
 	        value: function add(str, strId) {
-	
 	            var chars = this.createCharsFromStr(str, strId);
-	            logFunc("add", [str, strId], [this.idsOfCharsToDeleteLater, chars]);
-	
 	            for (var i = chars.length - 1; i >= 0; --i) {
 	                for (var j = this.idsOfCharsToDeleteLater.length - 1; j >= 0; --j) {
 	                    if (chars[i].id.isEqual(this.idsOfCharsToDeleteLater[j])) {
@@ -645,24 +662,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	            }
-	            this.doc.addChars(chars);
-	        }
-	    }, {
-	        key: 'remove',
-	        value: function remove(fromPos, toPos) {
-	            logFunc("remove", [fromPos, toPos]);
-	            var delIds = this.doc.getCharIds(fromPos, toPos);
-	            var delIdsCopy = delIds.map(function (id) {
-	                return id.copy;
-	            });
-	            this.doc.delChars(fromPos, toPos);
-	            return this.createRemoteDelCommand(delIds);
+	            var changes = this.doc.addCharsAndGetChanges(chars);
+	            return changes;
 	        }
 	    }, {
 	        key: 'del',
 	        value: function del(ids) {
-	            //optimize eg. if consecutive ids then obtain range (pos, pos+length-1)
-	            logFunc("del", [ids]);
+	            var pos0 = 1;
+	            var delPos = [];
+	
 	            var _iteratorNormalCompletion = true;
 	            var _didIteratorError = false;
 	            var _iteratorError = undefined;
@@ -671,8 +679,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                for (var _iterator = ids[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                    var id = _step.value;
 	
-	                    var pos = this.doc.getPosOfCharWithId(id);
-	                    if (pos != null) this.doc.delChar(pos);else this.idsOfCharsToDeleteLater.push(id);
+	                    var _pos = this.doc.getPosOfCharWithIdStartingFrom(id, pos0);
+	                    if (_pos != null) {
+	                        delPos.push(_pos);
+	                        pos0 = _pos;
+	                    } else this.idsOfCharsToDeleteLater.push(id);
 	                }
 	            } catch (err) {
 	                _didIteratorError = true;
@@ -685,6 +696,85 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } finally {
 	                    if (_didIteratorError) {
 	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+	
+	            var changes = [];
+	            var prevUsedPos = null;
+	            var delPosRange = { start: null, end: null };
+	            for (var i = delPos.length - 1; i >= 0; --i) {
+	                var pos = delPos[i];
+	                if (prevUsedPos === pos + 1 || delPosRange.start == null) delPosRange = this.extendRange(delPosRange, pos);else {
+	                    var change = { type: "del", from: delPosRange.start - 1, to: delPosRange.end - 1 };
+	                    changes.push(change);
+	                    delPosRange = { start: pos, end: pos };
+	                }
+	                if (i == 0 && delPosRange.start != null) {
+	                    var _change = { type: "del", from: delPosRange.start - 1, to: delPosRange.end - 1 };
+	                    changes.push(_change);
+	                }
+	                prevUsedPos = pos;
+	            }
+	
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
+	
+	            try {
+	                for (var _iterator2 = delPos[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var _pos2 = _step2.value;
+	
+	                    this.doc.delChar(_pos2);
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+	
+	            return changes;
+	        }
+	    }, {
+	        key: 'extendRange',
+	        value: function extendRange(range, pos) {
+	            return range.start == null ? { start: pos, end: pos } : { start: pos, end: range.end };
+	        }
+	    }, {
+	        key: 'Olddel',
+	        value: function Olddel(ids) {
+	            //optimize eg. if consecutive ids then obtain range (pos, pos+length-1)
+	            var _iteratorNormalCompletion3 = true;
+	            var _didIteratorError3 = false;
+	            var _iteratorError3 = undefined;
+	
+	            try {
+	                for (var _iterator3 = ids[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                    var id = _step3.value;
+	
+	                    var pos = this.doc.getPosOfCharWithId(id);
+	                    if (pos != null) this.doc.delChar(pos);else this.idsOfCharsToDeleteLater.push(id);
+	                }
+	            } catch (err) {
+	                _didIteratorError3 = true;
+	                _iteratorError3 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                        _iterator3.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError3) {
+	                        throw _iteratorError3;
 	                    }
 	                }
 	            }
@@ -704,28 +794,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	            var chars = [];
 	            var offset = strId.offset;
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
+	            var _iteratorNormalCompletion4 = true;
+	            var _didIteratorError4 = false;
+	            var _iteratorError4 = undefined;
 	
 	            try {
-	                for (var _iterator2 = str[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var char = _step2.value;
+	                for (var _iterator4 = str[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                    var char = _step4.value;
 	
 	                    chars.push(new _Char2.default(char, new _CharId2.default(base, offset)));
 	                    ++offset;
 	                }
 	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
+	                _didIteratorError4 = true;
+	                _iteratorError4 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
+	                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                        _iterator4.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
+	                    if (_didIteratorError4) {
+	                        throw _iteratorError4;
 	                    }
 	                }
 	            }
