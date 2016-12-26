@@ -1,9 +1,10 @@
-module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser, Connection, $auth) {
+module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser, Connection, $auth, NotAuthenticatedState) {
     $rootScope.$mdSidenav = $mdSidenav;
 
     $rootScope.$on('$stateChangeSuccess',
         function (event, toState, toParams, fromState, fromParams) {
             if (toState.name !== 'authenticating' && !$auth.isAuthenticated()) {
+                NotAuthenticatedState.set({ fromState, fromParams });
                 $state.go('login');
             }
         });

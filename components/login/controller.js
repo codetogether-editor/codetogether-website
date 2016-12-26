@@ -1,14 +1,17 @@
-module.exports = function ($scope, $auth, ngNotify, $state, $rootScope, CurrentUser) {
+module.exports = function ($scope, $auth, ngNotify, $state, $rootScope, CurrentUser, NotAuthenticatedState) {
     $scope.authenticate = async function () {
         try {
-            var auth = await $auth.authenticate('github');            
+            var { toState, toParams } = NotAuthenticatedState.get();
+            var auth = await $auth.authenticate('github');
             var user = await CurrentUser.get();
 
             $rootScope.user = user;
 
-            $state.go('editor');
+            var toStateName = toState ? toState.name : 'editor';
+            $state.go(toStateName, toParams);
         }
-        catch(e) {
+        catch (e) {
+            console.error(e);
             ngNotify.set('Authorization failed!', 'error');
         }
     }
