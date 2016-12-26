@@ -1,11 +1,13 @@
-module.exports = function () {
+module.exports = function (Observable) {
     var sessionId = null
     var docChanger = null
     var observable = new Observable()
+    var loogotDoc
+    var algorithm
 
     observable.init = (sessionId) => {
-        var loogotDoc = new Document()
-        var algorithm = new Algorithm(loogotDoc, sessionId)
+        loogotDoc = new Document()
+        algorithm = new Algorithm(loogotDoc, sessionId)
     }
 
     observable.loadDoc = (remoteCommands) => {

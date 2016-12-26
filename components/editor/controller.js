@@ -1,10 +1,12 @@
 var Range = ace.require('ace/range').Range;
 
-module.exports = async function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout) {
+module.exports = async function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout, LogootDoc) {
     $scope.editorCfg = angular.extend(App.cfg.editor, { onLoad: Editor.set });
 
     var editor = await Editor.get();
     var doc = editor.getSession().getDocument();
+
+    // LogootDoc.init(0);
 
     Files.subscribe(async (args) => {
         var { file, meta } = args;
