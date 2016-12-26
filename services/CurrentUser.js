@@ -5,12 +5,10 @@ module.exports = function ($http, $auth, $q) {
     var deferred = $q.defer();
 
     async function get() {
-        if (token) {
-            $http.get(userApiUrl).then((res) => {
-                user = res.data.user;
-                deferred.resolve(user);
-            });
-        }
+        $http.get(userApiUrl).then((res) => {
+            user = res.data.user;
+            deferred.resolve(user);
+        });
 
         return deferred.promise;
     }
