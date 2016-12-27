@@ -7,7 +7,7 @@ module.exports = function ($scope, $auth, ngNotify, $state, $rootScope, CurrentU
 
             $rootScope.user = user;
 
-            var toStateName = toState ? toState.name : 'editor';
+            var toStateName = toState && toState.name ? toState.name : 'editor';
             $state.go(toStateName, toParams);
         }
         catch (e) {
