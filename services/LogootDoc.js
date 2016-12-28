@@ -29,7 +29,7 @@ module.exports = function (Observable) {
     }
 
     observable.remove = ({startIndex, endIndex}) => {
-         var delCmd = algorithm.remove(startIndex + 1, endIndex + 1)
+         var delCmd = algorithm.remove(startIndex + 1, endIndex)
          var command = {
              type: 'emitDel',
              ids: delCmd.ids

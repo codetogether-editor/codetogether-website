@@ -44,10 +44,13 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
             return;
         }
 
+        var startIndex = doc.positionToIndex(e.start, 0)
+        var countChars = (lines) => (lines.reduce((a, b) => a + b.length + 1,0) - 1)
+
         var change = {
-            startIndex: doc.positionToIndex(e.start, 0),
-            endIndex: doc.positionToIndex(e.end, 0),
-            text: e.lines.join('\n')
+            startIndex: startIndex,
+            endIndex: e.action == 'remove' ? startIndex + countChars(e.lines) : null,
+            text: e.action == 'insert' ? e.lines.join('\n') : null
         };
 
         // addMarker({ e })
