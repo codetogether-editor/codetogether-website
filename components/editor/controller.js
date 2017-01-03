@@ -16,7 +16,9 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
     configureEditor();
 
-    LogootDoc.init(0);
+    //temporary solution, sessionIds should be always unique
+    var sessionId = Math.floor((Math.random() * 1000) + 1);
+    LogootDoc.init(sessionId);
 
     Files.subscribe(async (args) => {
         var { file, meta } = args;
@@ -65,10 +67,12 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
             var position = doc.indexToPosition(command.index);
             doc.insert(position, command.value);
         } else if(command.type == 'del'){
-        //todo
+            var fromPos = doc.indexToPosition(command.fromIndex)
+            var toPos = doc.indexToPosition(command.toIndex)
+            doc.remove(new Range(fromPos.row, fromPos.column, toPos.row, toPos.column))
         }
 
-        console.log(command);
+        //console.log(command);
     });
 
     if ($stateParams.id) {

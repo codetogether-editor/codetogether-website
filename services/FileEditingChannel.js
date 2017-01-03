@@ -6,7 +6,7 @@ module.exports = function (Observable, Connection, LogootDoc, $window) {
     //var socket = io.connect('http://063f5e69.ngrok.io');
 
     socket.on('remoteCommand', (command) => {
-        console.log(command);
+        //console.log(command);
         LogootDoc[command.type](command);
     });
 
