@@ -38,7 +38,9 @@ module.exports = function (Observable) {
     }
 
     observable.add = ({string, firstCharId}) => {
-        var changes = algorithm.add(string, firstCharId);
+        var baseObj = new Base(firstCharId.base.main, firstCharId.base.sessionId, firstCharId.base.clock)
+        var charIdObj = new CharId(baseObj, firstCharId.offset)
+        var changes = algorithm.add(string, charIdObj);
         for(var change of changes){
             var command = {
                 type: 'add',

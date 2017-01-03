@@ -56,5 +56,10 @@ public class HelloWorld {
         {{language}} <i class="material-icons">settings</i>
     </span>
 </div>`
+    },
+    {
+        id: '4',
+        fileName: 'test123.html',
+        content: ''
     }
 ];

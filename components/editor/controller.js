@@ -59,8 +59,12 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
     LogootDoc.subscribe((command) => {
         var allowedActions = ['add', 'del'];
-        var actionsMap = {
-
+        if(command.type == 'add'){
+            var position = doc.indexToPosition(command.index)
+            console.log(position, command.value)
+            doc.insert(position, command.value)
+        } else if(command.type == 'del'){
+        //todo
         }
 
         console.log(command);
