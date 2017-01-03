@@ -37,7 +37,7 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
     doc.on('change', (e) => { 
         var allowedActions = ['insert', 'remove'];
-        var userChange = editor.curOp && editor.curOp.args;
+        var userChange = editor.curOp && editor.curOp.command.name;
 
         if (!userChange || allowedActions.indexOf(e.action) === -1) {
             return;

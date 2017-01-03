@@ -50,7 +50,7 @@ module.exports = function (Observable) {
     }
 
     observable.del = (ids) => {
-        var  changes = docChanger.delAndGetChanges(ids);
+        var  changes = algorithm.del(ids);
         for(var change of changes){
             var command = {
                 type: 'del',
