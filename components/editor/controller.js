@@ -1,6 +1,6 @@
 var Range = ace.require('ace/range').Range;
 
-module.exports = async function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout, LogootDoc) {
+module.exports = async function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout, LogootDoc, FileEditingChannel) {
     $scope.editorCfg = angular.extend(App.cfg.editor, { onLoad: Editor.set });
     Editor.reset();
 
@@ -8,10 +8,9 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
     var doc = editor.getSession().getDocument();
 
     function configureEditor() {
-        editor.getSession().setMode("ace/mode/javascript");
+        editor.getSession().setMode('ace/mode/javascript');
         editor.setOptions({
-            fontFamily: "Consolas",
-            fontSize: "14px"
+            fontSize: '14px'
         });
     }
 
