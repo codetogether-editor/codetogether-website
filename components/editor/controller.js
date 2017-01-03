@@ -16,7 +16,7 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
     configureEditor();
 
-    // LogootDoc.init(0);
+    LogootDoc.init(0);
 
     Files.subscribe(async (args) => {
         var { file, meta } = args;
@@ -54,7 +54,16 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
         // addMarker({ e })
 
-        // LogootDoc[e.action](change);
+        LogootDoc[e.action](change);
+    });
+
+    LogootDoc.subscribe((command) => {
+        var allowedActions = ['add', 'del'];
+        var actionsMap = {
+
+        }
+
+        console.log(command);
     });
 
     if ($stateParams.id) {

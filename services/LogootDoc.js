@@ -37,8 +37,8 @@ module.exports = function (Observable) {
          observable.next(command)
     }
 
-    observable.add = ({str, firstCharId}) => {
-        var changes = algorithm.add(str, firstCharId);
+    observable.add = ({string, firstCharId}) => {
+        var changes = algorithm.add(string, firstCharId);
         for(var change of changes){
             var command = {
                 type: 'add',
