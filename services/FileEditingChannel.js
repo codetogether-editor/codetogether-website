@@ -3,6 +3,7 @@ module.exports = function (Observable, Connection, LogootDoc, $window) {
     var io = $window.io;
 
     var socket = io.connect('http://localhost:3000');
+    //var socket = io.connect('http://063f5e69.ngrok.io');
 
     socket.on('remoteCommand', (command) => {
         console.log(command);
@@ -17,9 +18,16 @@ module.exports = function (Observable, Connection, LogootDoc, $window) {
 
     LogootDoc.subscribe((command) => {
         var allowedCommands = ['emitAdd', 'emitDel'];
-        command.type = command.type.replace('emit', '').toLowerCase(); // e.g. 'emitAdd' to 'add'
+        if (allowedCommands.indexOf(command.type) === -1) {
+            return;
+        }
 
-        socket.emit('remoteCommand', command);
+        var remoteCommand = {};
+        angular.copy(command, remoteCommand);
+
+        remoteCommand.type = remoteCommand.type.replace('emit', '').toLowerCase(); // e.g. 'emitAdd' to 'add'
+
+        socket.emit('remoteCommand', remoteCommand);
 
         // console.log(command);
     });
