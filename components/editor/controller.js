@@ -63,9 +63,17 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
         var allowedActions = ['add', 'del'];
         if(allowedActions.indexOf(command.type) === -1)
             return;
+
+        var prevCursorPos = doc.positionToIndex(editor.getCursorPosition())
+        var newCursorPos = prevCursorPos
+
         if(command.type == 'add'){
             var position = doc.indexToPosition(command.index);
             doc.insert(position, command.value);
+            if(prevCursorPos > position)
+                newCursorPos = prevCursorPos + command.value.length
+            editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
+            
         } else if(command.type == 'del'){
             var fromPos = doc.indexToPosition(command.fromIndex)
             var toPos = doc.indexToPosition(command.toIndex)
