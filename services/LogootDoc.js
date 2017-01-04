@@ -1,4 +1,4 @@
-module.exports = function (Observable) {
+module.exports = function (Observable, $window) {
     var SHOW_LOGS = false // huge performance impact
     var sessionId = null
     var observable = new Observable()
@@ -7,6 +7,7 @@ module.exports = function (Observable) {
 
     observable.init = (sessionId) => {
         loogotDoc = new Document()
+        $window.LOG = loogotDoc
         algorithm = new Algorithm(loogotDoc, sessionId)
     }
 
