@@ -70,7 +70,7 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
         if(command.type == 'add'){
             var position = doc.indexToPosition(command.index);
             doc.insert(position, command.value);
-            if(prevCursorPos > position)
+            if(prevCursorPos > command.index)
                 newCursorPos = prevCursorPos + command.value.length
             editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
             
@@ -78,6 +78,11 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
             var fromPos = doc.indexToPosition(command.fromIndex)
             var toPos = doc.indexToPosition(command.toIndex)
             doc.remove(new Range(fromPos.row, fromPos.column, toPos.row, toPos.column))
+            if(command.fromIndex < prevCursorPos && command.toIndex < prevCursorPos)
+                newCursorPos -= (command.toIndex - command.fromIndex)
+            else if(command.fromIndex < prevCursorPos && command.toIndex > prevCursorPos)
+                newCursorPos -= (prevCursorPos - command.fromIndex)
+            editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
         }
 
         //console.log(command);
