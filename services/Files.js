@@ -1,11 +1,13 @@
 var sampleFiles = require('../dummyData/files');
 
-module.exports = function ($rootScope, Observable) {
+module.exports = function ($rootScope, Observable, CurrentUser, FileRes) {
     var current = null;
     var files = null;
     var observable = new Observable();
 
     observable.fetch = () => {
+        // var currentUserData = await CurrentUser.get().$promise;
+        // files = currentUserData.user.files;
         files = sampleFiles;
     };
 
@@ -37,6 +39,13 @@ module.exports = function ($rootScope, Observable) {
 
     observable.add = (fileName) => {
         // send file to the server and then add response data to files
+        // var payload = {
+        //     file: {
+        //         name: fileName
+        //     }
+        // };
+
+        // FileRes.save({}, payload);
 
         var simulateServerResponse = () => {
             return { fileName, content: '', id: `${Math.random()}` };

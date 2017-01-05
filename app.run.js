@@ -10,7 +10,8 @@ module.exports = async function ($rootScope, $mdSidenav, $state, Editor, Current
         });
 
     if ($auth.isAuthenticated()) {
-        $rootScope.user = await CurrentUser.get();
+        var currentUserData = await CurrentUser.get().$promise;
+        $rootScope.user = currentUserData.user;
 
         // Phoenix test
 
@@ -31,4 +32,6 @@ module.exports = async function ($rootScope, $mdSidenav, $state, Editor, Current
     }
 
     $rootScope.$apply();
+
+    console.log($rootScope.user);
 }
