@@ -16,7 +16,9 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
     configureEditor();
 
-    // LogootDoc.init(0);
+    //temporary solution, sessionIds should be always unique
+    var sessionId = Math.floor((Math.random() * 1000) + 1);
+    LogootDoc.init(sessionId);
 
     Files.subscribe(async (args) => {
         var { file, meta } = args;
@@ -54,7 +56,36 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
         // addMarker({ e })
 
-        // LogootDoc[e.action](change);
+        LogootDoc[e.action](change);
+    });
+
+    LogootDoc.subscribe((command) => {
+        var allowedActions = ['add', 'del'];
+        if(allowedActions.indexOf(command.type) === -1)
+            return;
+
+        var prevCursorPos = doc.positionToIndex(editor.getCursorPosition())
+        var newCursorPos = prevCursorPos
+
+        if(command.type == 'add'){
+            var position = doc.indexToPosition(command.index);
+            doc.insert(position, command.value);
+            if(prevCursorPos > command.index)
+                newCursorPos = prevCursorPos + command.value.length
+            editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
+            
+        } else if(command.type == 'del'){
+            var fromPos = doc.indexToPosition(command.fromIndex)
+            var toPos = doc.indexToPosition(command.toIndex)
+            doc.remove(new Range(fromPos.row, fromPos.column, toPos.row, toPos.column))
+            if(command.fromIndex < prevCursorPos && command.toIndex < prevCursorPos)
+                newCursorPos -= (command.toIndex - command.fromIndex)
+            else if(command.fromIndex < prevCursorPos && command.toIndex > prevCursorPos)
+                newCursorPos -= (prevCursorPos - command.fromIndex)
+            editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
+        }
+
+        //console.log(command);
     });
 
     if ($stateParams.id) {

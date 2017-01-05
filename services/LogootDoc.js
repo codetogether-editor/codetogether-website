@@ -1,12 +1,13 @@
-module.exports = function (Observable) {
+module.exports = function (Observable, $window) {
+    var SHOW_LOGS = false // huge performance impact
     var sessionId = null
-    var docChanger = null
     var observable = new Observable()
     var loogotDoc
     var algorithm
 
     observable.init = (sessionId) => {
         loogotDoc = new Document()
+        $window.LOG = loogotDoc
         algorithm = new Algorithm(loogotDoc, sessionId)
     }
 
@@ -26,6 +27,8 @@ module.exports = function (Observable) {
             firstCharId: addCmd.id
         }
         observable.next(command)
+
+        if(SHOW_LOGS) loogotDoc.showDetailedSessionState("INS")
     }
 
     observable.remove = ({startIndex, endIndex}) => {
@@ -35,10 +38,14 @@ module.exports = function (Observable) {
              ids: delCmd.ids
          }
          observable.next(command)
+
+         if(SHOW_LOGS) loogotDoc.showDetailedSessionState("REM")
     }
 
-    observable.add = ({str, firstCharId}) => {
-        var changes = algorithm.add(str, firstCharId);
+    observable.add = ({string, firstCharId}) => {
+        var baseObj = new Base(firstCharId.base.main, firstCharId.base.sessionId, firstCharId.base.clock)
+        var charIdObj = new CharId(baseObj, firstCharId.offset)
+        var changes = algorithm.add(string, charIdObj);
         for(var change of changes){
             var command = {
                 type: 'add',
@@ -47,18 +54,23 @@ module.exports = function (Observable) {
             }
             observable.next(command)
         }
+
+        if(SHOW_LOGS) loogotDoc.showDetailedSessionState("ADD")
     }
 
-    observable.del = (ids) => {
+    observable.del = ({ids}) => {
+        ids = ids.map(i => new CharId(new Base(i.base.main, i.base.sessionId, i.base.clock), i.offset))
         var  changes = algorithm.del(ids);
         for(var change of changes){
             var command = {
                 type: 'del',
                 fromIndex: change.from,
-                toIndex: change.to
+                toIndex: change.to + 1
             }
             observable.next(command)
         }
+
+        if(SHOW_LOGS) loogotDoc.showDetailedSessionState("DEL")
     }
     
     return observable;
