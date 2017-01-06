@@ -5,7 +5,7 @@ module.exports = async function ($rootScope, $mdSidenav, $state, Editor, Current
         function (event, toState, toParams, fromState, fromParams) {
             if (toState.name !== 'authenticating' && !$auth.isAuthenticated()) {
                 NotAuthenticatedState.set({ fromState, fromParams });
-                // $state.go('login');
+                $state.go('login');
             }
         });
 

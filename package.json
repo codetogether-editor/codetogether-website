@@ -24,7 +24,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No test specified\" && exit 0",
+    "build-production": "npm install && bower install && webpack --define \"environment\"=\"'production'\" --progress --colors && live-server --entry-file=index.html"
   },
   "author": "Tomasz Pierzchała",
   "license": "ISC"

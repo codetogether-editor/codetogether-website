@@ -47,37 +47,33 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
             text: e.action == 'insert' ? e.lines.join('\n') : null
         };
 
-        // addMarker({ e })
-
         LogootDoc[e.action](change);
     });
 
     LogootDoc.subscribe((command) => {
         var allowedActions = ['add', 'del'];
-        if(allowedActions.indexOf(command.type) === -1)
+        if (allowedActions.indexOf(command.type) === -1)
             return;
 
         var prevCursorPos = doc.positionToIndex(editor.getCursorPosition())
         var newCursorPos = prevCursorPos
 
-        if(command.type == 'add'){
+        if (command.type == 'add') {
             var position = doc.indexToPosition(command.index);
             doc.insert(position, command.value);
-            if(prevCursorPos > command.index)
+            if (prevCursorPos > command.index)
                 newCursorPos = prevCursorPos + command.value.length
             editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
-            
-        } else if(command.type == 'del'){
+
+        } else if (command.type == 'del') {
             var fromPos = doc.indexToPosition(command.fromIndex)
             var toPos = doc.indexToPosition(command.toIndex)
             doc.remove(new Range(fromPos.row, fromPos.column, toPos.row, toPos.column))
-            if(command.fromIndex < prevCursorPos && command.toIndex < prevCursorPos)
+            if (command.fromIndex < prevCursorPos && command.toIndex < prevCursorPos)
                 newCursorPos -= (command.toIndex - command.fromIndex)
-            else if(command.fromIndex < prevCursorPos && command.toIndex > prevCursorPos)
+            else if (command.fromIndex < prevCursorPos && command.toIndex > prevCursorPos)
                 newCursorPos -= (prevCursorPos - command.fromIndex)
             editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
         }
-
-        //console.log(command);
     });
 }

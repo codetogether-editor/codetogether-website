@@ -2,7 +2,7 @@ module.exports = function ($stateProvider, $locationProvider) {
     var stateViews = require.context('./states', true, /^\.\/.*\.html$/);
     var resolve = require('./states/editor/resolve');
     var controller = require('./states/editor/controller');
-    
+
     $locationProvider.html5Mode(true);
 
     $stateProvider.state({ name: 'login', url: '/login', template: stateViews('./login/template.html') });
