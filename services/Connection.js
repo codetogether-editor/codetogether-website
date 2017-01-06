@@ -18,6 +18,9 @@ module.exports = function ($auth, $window, Observable) {
 
     var createChannel = (name, params = {}) => {
         channel = socket.channel(name, params);
+        channel.join();
+        
+        return channel;
     }
 
     var getChannel = () => channel;
