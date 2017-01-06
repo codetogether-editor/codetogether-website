@@ -3,9 +3,9 @@ module.exports = function ($scope, $auth, ngNotify, $state, $rootScope, CurrentU
         try {
             var { toState, toParams } = NotAuthenticatedState.get();
             var auth = await $auth.authenticate('github');
-            var user = await CurrentUser.get();
+            var userData = await CurrentUser.get().$promise;
 
-            $rootScope.user = user;
+            $rootScope.user = userData.user;
 
             var toStateName = toState && toState.name ? toState.name : 'editor';
             $state.go(toStateName, toParams);

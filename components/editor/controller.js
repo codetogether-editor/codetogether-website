@@ -1,6 +1,6 @@
 var Range = ace.require('ace/range').Range;
 
-module.exports = async function ($scope, $rootScope, Editor, $state, $stateParams, Files, $window, $timeout, LogootDoc, FileEditingChannel) {
+module.exports = async function ($scope, $rootScope, $state, Editor, $stateParams, Files, LogootDoc, FileEditingChannel) {
     $scope.editorCfg = angular.extend(App.cfg.editor, { onLoad: Editor.set });
     Editor.reset();
 
@@ -27,17 +27,10 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
         $scope.document = file.content;
 
         editor.getSession().setMode(`ace/mode/${meta.name}`);
-        editor.resize(true); 
+        editor.resize(true);
     });
 
-    // var addMarker = ({ className, e }) => {
-    //     className = className || 'me-highlight';
-    //     var range = new Range(e.start.row, e.start.column, e.end.row, e.end.column);
-
-    //     editor.session.addMarker(range, className, 'fullLine', false);
-    // };
-
-    doc.on('change', (e) => { 
+    doc.on('change', (e) => {
         var allowedActions = ['insert', 'remove'];
         var userChange = editor.curOp && editor.curOp.command.name;
 
@@ -46,7 +39,7 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
         }
 
         var startIndex = doc.positionToIndex(e.start, 0)
-        var countChars = (lines) => (lines.reduce((a, b) => a + b.length + 1,0) - 1)
+        var countChars = (lines) => (lines.reduce((a, b) => a + b.length + 1, 0) - 1)
 
         var change = {
             startIndex: startIndex,
@@ -87,8 +80,4 @@ module.exports = async function ($scope, $rootScope, Editor, $state, $stateParam
 
         //console.log(command);
     });
-
-    if ($stateParams.id) {
-        Files.setCurrent($stateParams.id);
-    }
 }

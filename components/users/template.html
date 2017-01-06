@@ -11,13 +11,13 @@
         <div layout="row" layout-align="start center" style="padding: 5px 15px; margin: 5px 0; color: #fff; cursor: pointer; border-left: 3px solid #219fd1;"
             ng-click="$mdOpenMenu($event)">
             <img class="md-avatar" ng-src="{{currentUser.avatar_url}}" style="height: 30px; border-radius: 100%;">
-            <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">{{currentUser.name}}</span>
+            <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">{{currentUser.name || currentUser.email}}</span>
         </div>
 
         <div layout="row" layout-align="start center" style="padding: 5px 15px; margin: 5px 0; color: #fff; cursor: pointer; border-left: 3px solid #d1cc21;"
-            ng-click="$mdOpenMenu($event)">
-            <img class="md-avatar" src="http://placehold.it/200x200" style="height: 30px; border-radius: 100%;">
-            <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">Danny Parker</span>
+            ng-click="$mdOpenMenu($event)" ng-repeat="user in users">
+            <img class="md-avatar" ng-src="{{user.avatar_url}}" style="height: 30px; border-radius: 100%;">
+            <span class="md-caption" style="padding-left: 10px; padding-right: 5px; font-weight: bold;">{{user.name || user.email}}</span>
         </div>
     </md-content>
 </md-sidenav>

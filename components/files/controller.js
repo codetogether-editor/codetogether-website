@@ -1,5 +1,5 @@
-module.exports = function ($scope, Editor, $rootScope, $mdSidenav, Files, $state) {
-    $scope.files = Files.get();
+module.exports = async function ($scope, Editor, $rootScope, $mdSidenav, Files, $state) {
+    $scope.files = await Files.get();
 
     $scope.findFileMetaByName = Files.findFileMetaByName;
 

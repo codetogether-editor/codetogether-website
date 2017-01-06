@@ -2,20 +2,16 @@ var sampleFiles = require('../dummyData/files');
 
 module.exports = function ($rootScope, Observable, CurrentUser, FileRes) {
     var current = null;
-    var files = null;
+    var files = [];
     var observable = new Observable();
 
-    observable.fetch = () => {
-        // var currentUserData = await CurrentUser.get().$promise;
-        // files = currentUserData.user.files;
-        files = sampleFiles;
+    observable.fetch = async () => {
+        var currentUserData = await CurrentUser.get().$promise;
+        files = currentUserData.user.files;
+        console.log('Downloaded files', files);
     };
 
     observable.get = () => {
-        if (!files) {
-            observable.fetch();
-        }
-
         return files;
     };
 
@@ -37,22 +33,21 @@ module.exports = function ($rootScope, Observable, CurrentUser, FileRes) {
         return App.cfg.extensions.filter(x => x.ext === ext)[0] || App.cfg.extensions.filter(x => x.ext === '*')[0];
     };
 
-    observable.add = (fileName) => {
+    observable.add = async (fileName) => {
         // send file to the server and then add response data to files
-        // var payload = {
-        //     file: {
-        //         name: fileName
-        //     }
-        // };
+        var payload = {
+            file: {
+                name: fileName
+            }
+        };
 
-        // FileRes.save({}, payload);
+        var file = await FileRes.save({}, payload).$promise;
 
-        var simulateServerResponse = () => {
-            return { fileName, content: '', id: `${Math.random()}` };
-        }
+        // var simulateServerResponse = () => {
+        //     return { fileName, content: '', id: `${Math.random()}` };
+        // }
 
-        var file = simulateServerResponse();
-
+        // var file = simulateServerResponse();
         files.push(file);
         observable.setCurrent(file.id);
     };

@@ -1,4 +1,4 @@
-module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser, Connection, $auth, NotAuthenticatedState) {
+module.exports = async function ($rootScope, $mdSidenav, $state, Editor, CurrentUser, Connection, $auth, NotAuthenticatedState, Files, FileRes, ngNotify) {
     $rootScope.$mdSidenav = $mdSidenav;
 
     $rootScope.$on('$stateChangeSuccess',
@@ -28,10 +28,8 @@ module.exports = async function ($rootScope, $mdSidenav, $state, Editor, Current
         channel.push('ping', { msg: 'pong' }, 10000)
             .receive("ok", (msg) => console.log("created message", msg))
             .receive("error", (reasons) => console.log("create failed", reasons))
-            .receive("timeout", () => console.log("Networking issue..."))
+            .receive("timeout", () => console.log("Networking issue..."));
     }
 
     $rootScope.$apply();
-
-    console.log($rootScope.user);
 }
