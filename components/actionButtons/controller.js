@@ -11,12 +11,16 @@ module.exports = function ($scope, $mdDialog, Files) {
         controller: require('./dialogs/createFile/controller.js')
     };
     
+    var dialogOptions = {
+        clickOutsideToClose: true
+    };
+
     $scope.createFile = () => {
-        $mdDialog.show(createFileDialog);
+        $mdDialog.show(angular.extend(createFileDialog, dialogOptions));
     };
 
     $scope.share = () => {
-        $mdDialog.show(shareDialog);
+        $mdDialog.show(angular.extend(shareDialog, dialogOptions));
     };
 
     Files.subscribe((args) => {

@@ -1,16 +1,18 @@
 <files></files>
 
-<div layout="row" layout-fill ng-class="{'files-menu-expanded' : $mdSidenav('files').isOpen()}">
-    <div layout="column" flex="85">
+<div layout="row" layout-fill>
+    <div layout="column" flex="100" flex-gt-md="85">
         <header></header>
 
         <editor></editor>
 
         <footer></footer>
     </div>
-    <div flex="15">
+    <div ng-if="$mdMedia('gt-md')" flex-gt-md="15">
         <users></users>
     </div>
+
+    <users ng-if="!$mdMedia('gt-md')"></users>
 </div>
 
 <action-buttons></action-buttons>

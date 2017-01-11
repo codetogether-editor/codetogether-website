@@ -1,4 +1,6 @@
-module.exports = function ($scope, $rootScope, FileRes, Files) {
+module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia) {
+    $scope.$mdMedia = $mdMedia;
+    
     $scope.currentUser = $rootScope.user;
     $scope.users = [];
     var file = Files.getCurrent();

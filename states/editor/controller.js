@@ -1,4 +1,6 @@
-module.exports = function ($state, initFileManager, getId, FileRes, FileEditingChannel, LogootDoc) {
+module.exports = function ($scope, $state, initFileManager, getId, FileRes, FileEditingChannel, LogootDoc, $mdMedia) {
+    $scope.$mdMedia = $mdMedia;
+
     async function handleFile(id) {
         try {
             await FileRes.get({ id }).$promise;
