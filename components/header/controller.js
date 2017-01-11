@@ -17,6 +17,6 @@ module.exports = function ($scope, $rootScope, $mdSidenav, Files, $auth, $state,
     };
 
     Files.subscribe((args) => {
-        $scope.fileName = args.file.fileName;
+        $scope.fileName = args.file.name;
     });
 }

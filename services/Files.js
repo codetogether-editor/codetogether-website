@@ -5,13 +5,10 @@ module.exports = function ($rootScope, Observable, CurrentUser, FileRes) {
     var files = [];
     var observable = new Observable();
 
-    observable.fetch = async () => {
+    observable.get = async () => {
         var currentUserData = await CurrentUser.get().$promise;
         files = currentUserData.user.files;
-        console.log('Downloaded files', files);
-    };
 
-    observable.get = () => {
         return files;
     };
 
@@ -21,7 +18,7 @@ module.exports = function ($rootScope, Observable, CurrentUser, FileRes) {
         var file = files.filter(x => x.id === id)[0];
         current = file;
 
-        var meta = observable.findFileMetaByName(file.fileName);
+        var meta = observable.findFileMetaByName(file.name);
 
         observable.next({ file, meta });
     };
@@ -41,13 +38,9 @@ module.exports = function ($rootScope, Observable, CurrentUser, FileRes) {
             }
         };
 
-        var file = await FileRes.save({}, payload).$promise;
+        var res = await FileRes.save({}, payload).$promise;
+        var file = res.file;
 
-        // var simulateServerResponse = () => {
-        //     return { fileName, content: '', id: `${Math.random()}` };
-        // }
-
-        // var file = simulateServerResponse();
         files.push(file);
         observable.setCurrent(file.id);
     };

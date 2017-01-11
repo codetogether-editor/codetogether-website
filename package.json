@@ -24,7 +24,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "build-production": "npm install && bower install && webpack --define \"environment\"=\"'production'\" --progress --colors && live-server --entry-file=index.html"
+    "build-production": "npm install webpack -g && npm install && bower install && webpack --define \"environment\"=\"'production'\" --progress --colors"
   },
   "author": "Tomasz Pierzchała",
   "license": "ISC"

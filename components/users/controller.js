@@ -1,10 +1,10 @@
-module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia) {
+module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia, CurrentUser) {
     $scope.$mdMedia = $mdMedia;
-    
+
     $scope.currentUser = $rootScope.user;
     $scope.users = [];
     var file = Files.getCurrent();
-    
+
     if ($scope.file) {
         $scope.users = file.users;
     }
@@ -13,9 +13,15 @@ module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia) {
         $scope.currentUser = user;
     });
 
-    Files.subscribe(async (file) => {
+    Files.subscribe(async ({ file, meta }) => {
         var id = file.id;
-        var file = await FileRes.get({ id }).$promise;
-        $scope.users = file.users;
+        var res = await FileRes.get({ id }).$promise;
+        var file = res.file;
+
+        for (var i in file.users) {
+            var id = file.users[i];
+            var user = await CurrentUser.get({ id }).$promise;
+            $scope.users.push(user);
+        }
     });
 }

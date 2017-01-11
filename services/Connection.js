@@ -1,6 +1,5 @@
-module.exports = function ($auth, $window, Observable) {
+module.exports = function ($auth, $window) {
     var Phoenix = $window.Phoenix;
-    var observable = new Observable;
     var socket;
     var channel;
 
@@ -17,6 +16,10 @@ module.exports = function ($auth, $window, Observable) {
     }
 
     var createChannel = (name, params = {}) => {
+        if (channel) {
+            channel.leave();
+        }
+
         channel = socket.channel(name, params);
         channel.join();
         

@@ -1,7 +1,7 @@
 module.exports = {
     initFileManager: ($state, Files) => {
         return async () => {
-            await Files.fetch();
+            await Files.get();
         }
     },
     getId: ($state) => () => {

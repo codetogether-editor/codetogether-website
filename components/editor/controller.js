@@ -16,15 +16,17 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
 
     configureEditor();
 
-    //temporary solution, sessionIds should be always unique
-    var sessionId = Math.floor((Math.random() * 1000) + 1);
-    LogootDoc.init(sessionId);
-
     Files.subscribe(async (args) => {
+        //temporary solution, sessionIds should be always unique
+        var sessionId = Math.floor((Math.random() * 1000) + 1);
+        LogootDoc.init(sessionId);
+
         var { file, meta } = args;
 
         $scope.file = file;
-        $scope.document = file.content;
+        $scope.document = '';
+
+        FileEditingChannel.create(file.id);
 
         editor.getSession().setMode(`ace/mode/${meta.name}`);
         editor.resize(true);

@@ -7,8 +7,8 @@
 	<md-content layout-padding>
 		<div layout="column" ng-repeat="file in files" ng-click="changeFile(file)">
 			<div layout="row" layout-align="start center">
-				<i class="devicon-{{findFileMetaByName(file.fileName).icon || findFileMetaByName(file.fileName).name}}-plain colored" style="font-size: 24px; padding: 0; margin-right: 10px;"></i>
-				<span style="line-height: 24px; font-size: 14px;">{{file.fileName}}</span>
+				<i class="devicon-{{findFileMetaByName(file.name).icon || findFileMetaByName(file.name).name}}-plain colored" style="font-size: 24px; padding: 0; margin-right: 10px;"></i>
+				<span style="line-height: 24px; font-size: 14px;">{{file.name}}</span>
 			</div>
 			<md-divider style="margin-top: 10px;"></md-divider>
 		</div>
