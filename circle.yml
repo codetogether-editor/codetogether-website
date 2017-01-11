@@ -1,0 +1,23 @@
+machine:
+  environment:
+    PATH: "$HOME/.asdf/bin:$HOME/.asdf/shims:$PATH"
+
+dependencies:
+  cache_directories:
+    - ~/.asdf
+    - ~/.npm
+  pre:
+    - ./scripts/ci-setup.sh
+  override:
+    - npm install
+    - bower install
+
+test:
+  override:
+    - echo "no test"
+
+# deployment:
+#   production:
+#     branch: master
+#     commands:
+#       - ./scripts/deploy.sh
