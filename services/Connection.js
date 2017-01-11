@@ -4,13 +4,14 @@ module.exports = function ($auth, $window) {
     var channel;
 
     var address = `ws://${App.cfg.endpoint}/socket`;
-    var connectionData = {
-        params: {
-            token: $auth.getToken() 
-        }
-    };
 
     var connect = () => {
+        var connectionData = {
+            params: {
+                token: $auth.getToken()
+            }
+        };
+
         socket = new Phoenix.Socket(address, connectionData);
         socket.connect();
     }
@@ -22,7 +23,7 @@ module.exports = function ($auth, $window) {
 
         channel = socket.channel(name, params);
         channel.join();
-        
+
         return channel;
     }
 

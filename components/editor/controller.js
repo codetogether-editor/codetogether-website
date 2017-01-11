@@ -17,11 +17,11 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
     configureEditor();
 
     Files.subscribe(async (args) => {
+        var { file, meta } = args;
+        
         //temporary solution, sessionIds should be always unique
         var sessionId = Math.floor((Math.random() * 1000) + 1);
         LogootDoc.init(sessionId);
-
-        var { file, meta } = args;
 
         $scope.file = file;
         $scope.document = '';
@@ -30,8 +30,11 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
 
         editor.getSession().setMode(`ace/mode/${meta.name}`);
         editor.resize(true);
+
+        $state.go('editor.file', { id: file.id });
     });
 
+    // Local change
     doc.on('change', (e) => {
         var allowedActions = ['insert', 'remove'];
         var userChange = editor.curOp && editor.curOp.command.name;
@@ -52,6 +55,7 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
         LogootDoc[e.action](change);
     });
 
+    // Remote change
     LogootDoc.subscribe((command) => {
         var allowedActions = ['add', 'del'];
         if (allowedActions.indexOf(command.type) === -1)

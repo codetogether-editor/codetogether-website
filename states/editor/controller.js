@@ -1,9 +1,11 @@
-module.exports = async function ($scope, $state, initFileManager, getId, FileRes, FileEditingChannel, LogootDoc, $mdMedia, Files) {
+module.exports = async function ($scope, $state, initFileManager, getId, FileRes, FileEditingChannel, LogootDoc, $mdMedia, Files, Connection, $auth) {
     $scope.$mdMedia = $mdMedia;
+    var id = getId();
 
-    async function handleFile(id) {
+    var handleFile = async function (id) {
         try {
             await FileRes.get({ id }).$promise;
+            await initFileManager();
             Files.setCurrent(id);
         }
         catch (e) {
@@ -12,12 +14,12 @@ module.exports = async function ($scope, $state, initFileManager, getId, FileRes
         }
     };
 
+    Connection.connect();
+
     await initFileManager();
 
-    var id = getId();
-
     if (id) {
-        handleFile(id);
+        await handleFile(id);
     }
 
     FileEditingChannel.subscribe(command => LogootDoc[command.type](command));

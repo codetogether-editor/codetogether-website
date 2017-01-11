@@ -5,9 +5,10 @@ module.exports = async function ($scope, Editor, $rootScope, $mdSidenav, Files, 
 
     $scope.changeFile = async function (file) {
         Files.setCurrent(file.id);
-
-        $state.go('editor.file', { id: file.id });
-        
         $mdSidenav('files').close();
     };
+
+    Files.subscribe(async (file) => {
+        $scope.files = await Files.get();
+    });
 }

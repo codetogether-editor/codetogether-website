@@ -1,6 +1,5 @@
 module.exports = function (Observable, Connection, LogootDoc) {
     var observable = new Observable();
-    var connection = Connection.connect();
     var channel;
 
     observable.create = (fileId) => {
