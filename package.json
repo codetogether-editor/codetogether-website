@@ -22,7 +22,9 @@
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "html-webpack-plugin": "^2.26.0"
+  },
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "build-production": "npm install webpack -g && npm install && bower install && webpack --define \"environment\"=\"'production'\" --progress --colors"

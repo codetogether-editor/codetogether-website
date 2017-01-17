@@ -1,5 +1,6 @@
 var ace = require("brace");
 require("brace/mode/javascript");
+require("brace/theme/monokai");
 var Range = ace.Range;
 
 module.exports = async function ($scope, $rootScope, $state, Editor, $stateParams, Files, LogootDoc, FileEditingChannel) {

@@ -1,11 +1,13 @@
 var webpack = require("webpack");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  devtool: "source-map",
   cache: false,
   target: 'web',
   entry: ['babel-regenerator-runtime', './app.js'],
   output: {
-    path: __dirname,
+    path: __dirname + "/build",
     filename: 'bundle.js'
   },
   module: {
@@ -40,6 +42,10 @@ module.exports = {
   plugins: [
     new webpack.ResolverPlugin(
       new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
-    )
+    ),
+    new HtmlWebpackPlugin({
+      title: 'Code Together',
+      template: 'index.html'
+    }),
   ]
 };
