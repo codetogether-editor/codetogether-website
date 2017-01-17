@@ -1,5 +1,7 @@
+var Phoenix = require("phoenix");
+
 module.exports = function ($auth, $window) {
-    var Phoenix = $window.Phoenix;
+    var observable = new Observable;
     var socket;
     var channel;
 

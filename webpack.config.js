@@ -1,3 +1,5 @@
+var webpack = require("webpack");
+
 module.exports = {
   cache: false,
   target: 'web',
@@ -14,7 +16,12 @@ module.exports = {
         query: {
           presets: ['es2015'],
           plugins: ['syntax-async-functions','transform-regenerator']
-        }
+        },
+        exclude: [/node_modules/, /bower_components/]
+      },
+      {
+        test: /\.css$/,
+        loader: "style!css"
       },
       {
         test: /\.less$/,
@@ -26,5 +33,13 @@ module.exports = {
       }
     ],
   },
-  externals: [/bower_components/]
+  externals: [/bower_components/],
+  resolve: {
+    modulesDirectories: ["node_modules", "bower_components", "assets/js"]
+  },
+  plugins: [
+    new webpack.ResolverPlugin(
+      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
+    )
+  ]
 };

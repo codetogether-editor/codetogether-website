@@ -5,7 +5,7 @@ var routes = require('./app.routes');
 var config = require('./app.config');
 var less = require('./assets/less/style.less');
 
-window.App = app; 
+window.App = app;
 app.cfg = appCfg; // global settings
 
 function createComponents({ controllers, templates }) {

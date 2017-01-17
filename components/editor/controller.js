@@ -1,4 +1,6 @@
-var Range = ace.require('ace/range').Range;
+var ace = require("brace");
+require("brace/mode/javascript");
+var Range = ace.Range;
 
 module.exports = async function ($scope, $rootScope, $state, Editor, $stateParams, Files, LogootDoc, FileEditingChannel) {
     $scope.editorCfg = angular.extend(App.cfg.editor, { onLoad: Editor.set });
