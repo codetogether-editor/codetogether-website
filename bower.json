@@ -18,7 +18,7 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-material": "^1.1.1",
-    "ace-builds": "ace-build#^1.2.5",
+    "codetogether-ace-builds": "1.2.7",
     "angular-ui-ace": "bower",
     "angular-ui-router": "^0.3.1",
     "satellizer": "^0.15.5",

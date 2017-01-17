@@ -18,7 +18,7 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
 
     Files.subscribe(async (args) => {
         var { file, meta } = args;
-        
+
         //temporary solution, sessionIds should be always unique
         var sessionId = Math.floor((Math.random() * 1000) + 1);
         LogootDoc.init(sessionId);
@@ -35,16 +35,19 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
     });
 
     // Local change
-    doc.on('change', (e) => { 
-        if (e != undefined && e.hasOwnProperty('isRemote') && e.isRemote == true)
-            return    
+    doc.on('change', (e) => {
+        if (e && e.isRemote) {
+            return;
+        }
 
         var allowedActions = ['insert', 'remove'];
-        if (allowedActions.indexOf(e.action) === -1)
+        
+        if (allowedActions.indexOf(e.action) === -1) {
             return;
+        }
 
-        var startIndex = doc.positionToIndex(e.start, 0)
-        var countChars = (lines) => (lines.reduce((a, b) => a + b.length + 1, 0) - 1)
+        var startIndex = doc.positionToIndex(e.start, 0);
+        var countChars = (lines) => (lines.reduce((a, b) => a + b.length + 1, 0) - 1);
 
         var change = {
             startIndex: startIndex,
@@ -58,30 +61,42 @@ module.exports = async function ($scope, $rootScope, $state, Editor, $stateParam
     // Remote change
     LogootDoc.subscribe((command) => {
         var allowedActions = ['add', 'del'];
-        if (allowedActions.indexOf(command.type) === -1)
-            return;
 
-        var prevCursorPos = doc.positionToIndex(editor.getCursorPosition())
-        var newCursorPos = prevCursorPos
+        if (allowedActions.indexOf(command.type) === -1) {
+            return;
+        }
+
+        var prevCursorPos = doc.positionToIndex(editor.getCursorPosition());
+        var newCursorPos = prevCursorPos;
 
         if (command.type == 'add') {
             var position = doc.indexToPosition(command.index);
-            var isRemote = true
-            doc.insert(position, command.value, isRemote);
-            if(prevCursorPos > command.index)
-                newCursorPos = prevCursorPos + command.value.length
-            editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
-            editor.clearSelection()
+            var isRemote = true;
             
-        } else if(command.type == 'del'){
-            var fromPos = doc.indexToPosition(command.fromIndex)
-            var toPos = doc.indexToPosition(command.toIndex)
-            var isRemote = true
-            doc.remove(new Range(fromPos.row, fromPos.column, toPos.row, toPos.column), isRemote)
-            if(command.fromIndex < prevCursorPos && command.toIndex < prevCursorPos)
+            doc.insert(position, command.value, isRemote);
+            
+            if (prevCursorPos > command.index) {
+                newCursorPos = prevCursorPos + command.value.length;
+            }
+
+            editor.moveCursorToPosition(doc.indexToPosition(newCursorPos));
+            editor.clearSelection();
+
+        } else if (command.type == 'del') {
+            var fromPos = doc.indexToPosition(command.fromIndex);
+            var toPos = doc.indexToPosition(command.toIndex);
+            var isRemote = true;
+            
+            doc.remove(new Range(fromPos.row, fromPos.column, toPos.row, toPos.column), isRemote);
+            
+            if (command.fromIndex < prevCursorPos && command.toIndex < prevCursorPos) {
                 newCursorPos -= (command.toIndex - command.fromIndex)
-            else if(command.fromIndex < prevCursorPos && command.toIndex > prevCursorPos)
+            }
+
+            else if (command.fromIndex < prevCursorPos && command.toIndex > prevCursorPos) {
                 newCursorPos -= (prevCursorPos - command.fromIndex)
+            }
+
             editor.moveCursorToPosition(doc.indexToPosition(newCursorPos))
         }
     });
