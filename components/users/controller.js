@@ -20,7 +20,7 @@ module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia, Current
 
         for (var i in file.users) {
             var id = file.users[i];
-            var user = await CurrentUser.get({ id }).$promise;
+            var user = await Users.get({ id }).$promise;
             $scope.users.push(user);
         }
     });
