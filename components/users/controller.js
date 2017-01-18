@@ -1,4 +1,4 @@
-module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia, CurrentUser) {
+module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia, Users) {
     $scope.$mdMedia = $mdMedia;
 
     $scope.currentUser = $rootScope.user;
@@ -18,10 +18,18 @@ module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia, Current
         var res = await FileRes.get({ id }).$promise;
         var file = res.file;
 
+        $scope.users = [];
+
         for (var i in file.users) {
             var id = file.users[i];
-            var user = await Users.get({ id }).$promise;
-            $scope.users.push(user);
+            var userData = await Users.get({ id }).$promise;
+            var user = userData.user;
+
+            var containsUser = $scope.users.filter(x => x.id === user.id).length;
+
+            if (!containsUser) {
+                $scope.users.push(userData.user);
+            }
         }
     });
 }
