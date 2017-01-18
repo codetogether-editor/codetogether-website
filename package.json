@@ -25,7 +25,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "start": "webpack --define \"environment\"=\"'production'\" --progress --colors && live-server",
+    "start": "webpack --define \"environment\"=\"'production'\" --progress --colors && live-server --entry-file=index.html",
     "postinstall": "./node_modules/bower/bin/bower install && npm install webpack -g && npm install live-server -g"
   },
   "author": "Tomasz Pierzchała",
