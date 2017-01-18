@@ -1,5 +1,6 @@
 var netAddress = require('./app.defaults').netAddress;
-var clientId = environment === 'production' ? '74976130c11c77b38e5e' : '71ddcc9794861ae7b9e1';
+// var clientId = environment === 'production' ? '74976130c11c77b38e5e' : '71ddcc9794861ae7b9e1';
+var clientId = '71ddcc9794861ae7b9e1';
 
 module.exports = function ($authProvider) {
     $authProvider.github({
