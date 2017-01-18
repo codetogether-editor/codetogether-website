@@ -1,0 +1,30 @@
+{
+  "name": "codetogether-ace-builds",
+  "version": "1.2.7",
+  "description": "Ace (Ajax.org Cloud9 Editor)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "ignore": [
+    "demo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codetogether-editor/ace-builds.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/codetogether-editor/ace-builds/issues"
+  },
+  "homepage": "https://github.com/codetogether-editor/ace-builds",
+  "_release": "1.2.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.7",
+    "commit": "49c31116e9f585fd522b9a99f3d9211c1793cce1"
+  },
+  "_source": "https://github.com/codetogether-editor/ace-builds.git",
+  "_target": "1.2.7",
+  "_originalSource": "codetogether-ace-builds"
+}
