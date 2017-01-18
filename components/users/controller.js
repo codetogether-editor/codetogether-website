@@ -31,5 +31,7 @@ module.exports = function ($scope, $rootScope, FileRes, Files, $mdMedia, Users) 
                 $scope.users.push(userData.user);
             }
         }
+
+        $scope.$apply();
     });
 }
