@@ -18,12 +18,10 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-material": "^1.1.1",
-    "codetogether-ace-builds": "1.2.7",
     "angular-ui-ace": "bower",
     "angular-ui-router": "^0.3.1",
     "satellizer": "^0.15.5",
     "ng-notify": "^0.8.0",
-    "angular-phoenix": "^0.4.0",
     "angular-resource": "^1.6.1"
   },
   "resolutions": {
