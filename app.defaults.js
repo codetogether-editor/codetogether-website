@@ -1,4 +1,4 @@
-var netAddress = environment === 'production' ? 'https://code-together.herokuapp.com' : 'http://127.0.0.1:8080';
+var netAddress = environment === 'production' ? 'http://code-together.herokuapp.com' : 'http://127.0.0.1:8080';
 
 module.exports = {
     netAddress,
