@@ -2,7 +2,7 @@ var netAddress = environment === 'production' ? 'http://code-together.herokuapp.
 
 module.exports = {
     netAddress,
-    endpoint: 'api.codetogether.muskala.eu',
+    endpoint: 'code-together-api.herokuapp.com',
     editor: {
         theme: 'idle_fingers'
     },
