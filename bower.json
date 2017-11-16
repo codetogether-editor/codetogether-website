@@ -25,6 +25,6 @@
     "angular-resource": "^1.6.1"
   },
   "resolutions": {
-    "angular": "~1.x"
+    "angular": "1.6.6"
   }
 }
