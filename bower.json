@@ -26,5 +26,8 @@
     "satellizer": "^0.15.5",
     "ng-notify": "^0.8.0",
     "angular-resource": "1.5.8"
+  },
+  "resolutions": {
+    "angular": "1.5.8"
   }
 }
